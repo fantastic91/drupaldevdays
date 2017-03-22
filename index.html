@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Drupal Developer Days Seville 2017 | Create Drupal Content by Sending an Email | Miloš Bovan</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/drupaldevdays.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+				<div class="slides">
+					<section id="front" data-background="css/images/cover.png">
+						<h1>Create Drupal Content by Sending an Email</h1>
+						<p>
+							<small><a href="https://bovan.me" target="_blank">Miloš Bovan</a> <a href="http://drupal.org/u/mbovan" target="_blank">@mbovan</a> ♦ <a href="https://bovan.me/drupaldevdays" target="_blank">bovan.me/drupaldevdays</a></small>
+						</p>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Miloš Bovan (@mbovan)</h2>
+						<ul>
+							<li>Drupal 8 Developer at MD Systems</li>
+							<li>Student at Google Summer of Code 2016</li>
+							<li>Mentor at Google Code-In 2016</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<ul>
+							<img data-src="images/mds_contribution.png"/>
+							<li>Among World's leading Drupal contributors</li>
+							<li>20% of every project to the community</li>
+							<li>Full projects, Bootstrap weeks, Consulting, ...</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>What we'll cover</h2>
+						<ul>
+							<li>Use-cases</li>
+							<li>Inmail architecture</li>
+							<li>Mailhandler overview</li>
+							<li>Demo</li>
+							<li>Current status</li>
+							<li>Future ideas</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Why emails?</h2>
+						<img class="fragment" data-fragment-index="0" data-natural-width="779" data-natural-height="507" data-src="images/email_accounts_prediction.png"/>
+						<small class="fragment" data-fragment-index="0">March 2015, The Radicati Group</small>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Use-cases</h2>
+						<ul>
+							<li class="fragment" data-fragment-index="0">News portals</li>
+							<li class="fragment" data-fragment-index="1">An additional channel of content creation</li>
+							<li class="fragment" data-fragment-index="2">Comment replies</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Mailhandler + Inmail</h2>
+						<ul>
+							<li class="fragment" data-fragment-index="0">Redefined for Drupal 8</li>
+							<li class="fragment" data-fragment-index="1">Based on
+								<a href="http://www.drupal.org/project/inmail" target="_blank">Inmail</a>
+							</li>
+							<li class="fragment" data-fragment-index="2">Pluggable</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Architecture</h2>
+						<img data-natural-width="697" data-natural-height="525" data-src="images/Inmail_overview.png"/>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Architecture</h2>
+						<div class="columns">
+							<div class="left fragment" data-fragment-index="0">
+								<img data-natural-width="203" data-natural-height="388" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/601235/images/3259518/ma_Untitled_Diagram.svg"/></div>
+							<div class="right fragment" data-fragment-index="1"><img data-natural-width="203" data-natural-height="388" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/601235/images/3259521/mh_Untitled_Diagram.svg"/></div>
+						</div>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>PGP Analyzer</h2>
+						<ul>
+							<li class="fragment" data-fragment-index="0">Default support for digitally signed emails</li>
+							<li class="fragment" data-fragment-index="1">An additional layer or security</li>
+							<li class="fragment" data-fragment-index="2">Easy setup</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Entity Type Analyzer</h2>
+						<div class="columns">
+							<ul>
+								<li class="left fragment" data-fragment-index="0"><code>[{entity_type}][{bundle}]</code> parsing</li>
+								<li class="left fragment" data-fragment-index="1">Validation</li>
+							</ul>
+						</div>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Sender Analyzer</h2>
+						<ul>
+							<li class="left fragment" data-fragment-index="0">Identifies e-mail sender</li>
+							<li class="left fragment" data-fragment-index="1">Matches the user</li>
+							<li class="left fragment" data-fragment-index="2">Disabled by default</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Footer Analyzer</h2>
+						<ul>
+							<li class="left fragment" data-fragment-index="0">Identifies e-mail message footer</li>
+							<li class="left fragment" data-fragment-index="1">Basic implementation</li>
+							<li class="left fragment" data-fragment-index="2">2 cases supported:
+
+								<ul>
+									<li class="left fragment" data-fragment-index="3">"-- \n" (RFC 3676)</li>
+									<li class="left fragment" data-fragment-index="4">"On {day}, {month} {date}, {year} at {hour}:{minute} {AM|PM}" (Gmail standard)</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Body Analyzer</h2>
+						<ul>
+							<li class="left fragment" data-fragment-index="0">Analyzes the mail body</li>
+							<li class="left fragment" data-fragment-index="1">Body manipulation</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Node Handler</h2>
+						<ul>
+							<li class="fragment" data-fragment-index="0">Authenticates and authorizes a user</li>
+							<li class="fragment" data-fragment-index="1">Matches
+								<em>type</em>,
+								<em>body</em>,
+								<em>uid</em>,
+								<em>title</em> based on analyzed data
+							</li>
+							<li class="fragment" data-fragment-index="2">Creates a new node entity</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Comment Handler</h2>
+						<ul>
+							<li class="fragment" data-fragment-index="0">Available in the submodule</li>
+							<li class="fragment" data-fragment-index="1">Validates a user
+
+								<ul>
+									<li class="fragment" data-fragment-index="2">Authentication</li>
+									<li class="fragment" data-fragment-index="3">Authorization</li>
+									<li class="fragment" data-fragment-index="4">Signature verification</li>
+								</ul>
+							</li>
+							<li class="fragment" data-fragment-index="5">Extracts referenced #ID information</li>
+							<li class="fragment" data-fragment-index="6">Matches
+								<em>entity_type</em>,
+								<em>entity_id</em>,
+								<em>subject</em>,
+								<em>comment_body</em>,
+								<em>uid</em>
+							</li>
+							<li class="fragment" data-fragment-index="7">Creates a new comment entity</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>How it works?</h2>
+						<iframe src="https://player.vimeo.com/video/175383067" width="1280" height="620" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>The current status</h2>
+						<ul>
+							<li class="fragment" data-fragment-index="0">Still under development</li>
+							<li class="fragment" data-fragment-index="1">API breaks</li>
+							<li class="fragment" data-fragment-index="2">Collect integration</li>
+							<li class="fragment" data-fragment-index="3">Extensive test coverage</li>
+						</ul>
+					</section>
+					<section>
+						<h2>E-mail display</h2>
+						<img data-natural-width="1434" data-natural-height="928" data-src="images/email_display.png"/>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Next steps</h2>
+						<ul>
+							<li class="fragment" data-fragment-index="0">Drupal as a CRM
+								<ul>
+									<li>Inmail + Collect + CRM Core</li>
+								</ul>
+							</li>
+							<li class="fragment" data-fragment-index="1">Mailhandler
+								<ul>
+									<li>Rules integration</li>
+									<li>Handle Drupal commands</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+					<section data-background="css/images/base.png">
+						<h2>Thanks!</h2>
+						<img data-src="css/images/sponsors.png">
+					</section>
+				</div>
+			</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
